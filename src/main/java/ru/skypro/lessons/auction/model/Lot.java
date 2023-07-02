@@ -11,11 +11,14 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @Entity
-public class Bid {
+public class Lot {
+
     @Id
     private Integer id;
-    private String bidderName;
-    private String bidDate;
-
+    private String status;
+    private String title;
+    private String description;
+    private int startPrice;
+    private int bidPrice;
 
 }

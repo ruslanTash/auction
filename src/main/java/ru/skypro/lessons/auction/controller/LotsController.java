@@ -2,7 +2,10 @@ package ru.skypro.lessons.auction.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.lessons.auction.DTO.CreateLot;
+import ru.skypro.lessons.auction.DTO.FullLot;
 import ru.skypro.lessons.auction.model.Bid;
+import ru.skypro.lessons.auction.model.Lot;
 import ru.skypro.lessons.auction.service.LotsService;
 
 import java.util.List;
