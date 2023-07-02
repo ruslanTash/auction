@@ -20,38 +20,40 @@ public class LotsController {
     //    Получить информацию о первом ставившем на лот
     @GetMapping("/{id}/first")
     public Bid getFirstBidder(@PathVariable int id) {
-        return null;
+        return lotsService.getFirstBidder(id);
     }
 
     //    Возвращает имя ставившего на данный лот наибольшее количество раз
     @GetMapping("/{id}/frequent")
     public Bid getFrequentBidder(@PathVariable int id) {
-        return null;
+        return lotsService.getFrequentBidder(id);
     }
 
     //    Получить полную информацию о лоте
     @GetMapping("/{id}")
     public FullLot getEmployeeFullLotById(@PathVariable int id) {
-        return null;
+        return lotsService.getEmployeeFullLotById(id);
     }
 
 
     //    Начать торги по лоту
     @PostMapping("/{id}/start")
     public void startLot(@PathVariable int id) {
+        lotsService.startLot(id);
     }
 
 
     //    Сделать ставку по лоту
     @PostMapping("/{id}/bid")
     public String makeBet(@PathVariable int id) {
-        return null;
+        return lotsService.makeBet(id);
     }
 
 
     //    Остановить торги по лоту
     @PostMapping("/{id}/stop")
     public void stopLot(@PathVariable int id) {
+        lotsService.stopLot(id);
     }
 
 
@@ -61,21 +63,21 @@ public class LotsController {
                                @RequestParam String description,
                                @RequestParam int startPrice,
                                @RequestParam int bidPrice) {
-        return null;
+        return lotsService.createLot(title, description, startPrice, bidPrice);
     }
 
     //    Получить все лоты, основываясь на фильтре статуса и номере страницы
     @GetMapping()
     public List<Lot> getLotsByStatusAndPage(@RequestParam("status") String status,
                                             @RequestParam("page") int page) {
-        return null;
+        return lotsService.getLotsByStatusAndPage(status, page);
     }
 
 
     //    Экспортировать все лоты в файл CSV
     @GetMapping("/export")
     public String exportLots() {
-        return null;
+        return lotsService.exportLots();
     }
 
 
