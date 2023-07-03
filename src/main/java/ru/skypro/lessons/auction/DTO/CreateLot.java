@@ -3,6 +3,7 @@ package ru.skypro.lessons.auction.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.lessons.auction.model.Lot;
+import ru.skypro.lessons.auction.model.Status;
 
 @Setter
 @Getter
@@ -23,7 +24,7 @@ public class CreateLot {
 
     public Lot toLot(CreateLot createLot){
         Lot lot = new Lot();
-        lot.setStatus("CREATED");
+        lot.setStatus(Status.CREATED);
         lot.setTitle(this.getTitle());
         lot.setDescription(this.getDescription());
         lot.setStartPrice(this.getStartPrice());

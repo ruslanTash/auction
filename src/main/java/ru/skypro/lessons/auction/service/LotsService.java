@@ -4,6 +4,7 @@ import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
+import ru.skypro.lessons.auction.model.Status;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface LotsService {
 
     CreateLot createLot(String title, String description, int startPrice, int bidPrice);
 
-    List<Lot> getLotsByStatusAndPage(String status, int page);
+    List<Lot> getLotsByStatusAndPage(Status status, int page);
 
     String exportLots();
 }

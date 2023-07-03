@@ -6,6 +6,7 @@ import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
+import ru.skypro.lessons.auction.model.Status;
 import ru.skypro.lessons.auction.service.LotsService;
 
 import java.util.List;
@@ -68,7 +69,7 @@ public class LotsController {
 
     //    Получить все лоты, основываясь на фильтре статуса и номере страницы
     @GetMapping()
-    public List<Lot> getLotsByStatusAndPage(@RequestParam("status") String status,
+    public List<Lot> getLotsByStatusAndPage(@RequestParam("status") Status status,
                                             @RequestParam("page") int page) {
         return lotsService.getLotsByStatusAndPage(status, page);
     }

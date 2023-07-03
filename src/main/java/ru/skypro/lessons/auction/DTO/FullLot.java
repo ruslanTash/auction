@@ -3,12 +3,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
+import ru.skypro.lessons.auction.model.Status;
 
 @Setter
 @Getter
 public class FullLot {
     private Integer id;
-    private String status;
+    private Status status;
     private String title;
     private String description;
     private int startPrice;

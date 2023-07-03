@@ -1,15 +1,20 @@
 package ru.skypro.lessons.auction.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
+import ru.skypro.lessons.auction.model.Status;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +25,11 @@ public class LotsServiceImpl implements LotsService{
 
     @Override
     public Bid getFirstBidder(int id) {
-        return null;
+        Lot lot = (Lot) lotRepository.findById(id).orElseThrow(new RuntimeException(id));
+
+                .stream()
+                .map(l -> l.getBids())
+                .findFirst();
     }
 
     @Override
@@ -54,7 +63,7 @@ public class LotsServiceImpl implements LotsService{
     }
 
     @Override
-    public List<Lot> getLotsByStatusAndPage(String status, int page) {
+    public List<Lot> getLotsByStatusAndPage(Status status, int page) {
         return null;
     }
 

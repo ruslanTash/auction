@@ -1,7 +1,6 @@
 package ru.skypro.lessons.auction.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
@@ -13,9 +12,13 @@ import lombok.*;
 @Entity
 public class Bid {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String bidderName;
     private String bidDate;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "lot_id")
+//    private Lot lot;
 
 }
