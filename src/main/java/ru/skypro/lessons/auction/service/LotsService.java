@@ -1,6 +1,5 @@
 package ru.skypro.lessons.auction.service;
 
-import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
@@ -17,11 +16,11 @@ public interface LotsService {
 
     void startLot(int id);
 
-    String makeBet(int id);
+    void makeBet(int id, String bidderName);
 
     void stopLot(int id);
 
-    CreateLot createLot(String title, String description, int startPrice, int bidPrice);
+    Lot createLot(String title, String description, int startPrice, int bidPrice);
 
     List<Lot> getLotsByStatusAndPage(Status status, int page);
 

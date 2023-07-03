@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ public class Lot {
 
     @OneToMany
     @JoinColumn(name = "bid_id")
-    ArrayDeque<Bid> bids;
+    List<Bid> bids;
 
     public Lot(Integer id, Status status, String title, String description, int startPrice, int bidPrice, ArrayDeque<Bid> bids) {
         this.id = id;
@@ -35,7 +37,7 @@ public class Lot {
         this.description = description;
         this.startPrice = startPrice;
         this.bidPrice = bidPrice;
-        this.bids = new ArrayDeque<>(bids);
+        this.bids = new LinkedList<>(bids);
     }
 
     public Lot(Integer id, int statusId, String title, String description, int startPrice, int bidPrice) {

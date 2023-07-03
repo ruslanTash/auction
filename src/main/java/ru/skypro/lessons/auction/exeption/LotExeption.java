@@ -5,16 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.IOException;
-import java.sql.SQLException;
 
 @RestControllerAdvice
 public class LotExeption {
     @ExceptionHandler(LotNotFoundException.class)
-    public ResponseEntity<?> handleNotFound(LotNotFoundException e){
+    public ResponseEntity<?> handleLotNotFound(LotNotFoundException e){
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body("лот с id = %d не найден".formatted(e.getId()));
+    }
+
+    @ExceptionHandler(BidNotFoundException.class)
+    public ResponseEntity<?> handleBidNotFound(LotNotFoundException e){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("ставка не найдена");
     }
 
 }

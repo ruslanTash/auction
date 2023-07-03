@@ -1,12 +1,16 @@
 package ru.skypro.lessons.auction.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.skypro.lessons.auction.model.Lot;
 import ru.skypro.lessons.auction.model.Status;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateLot {
     private String title;
     private String description;

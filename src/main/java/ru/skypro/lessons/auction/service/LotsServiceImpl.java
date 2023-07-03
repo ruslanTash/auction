@@ -1,36 +1,46 @@
 package ru.skypro.lessons.auction.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
+import ru.skypro.lessons.auction.exeption.BidNotFoundException;
+import ru.skypro.lessons.auction.exeption.LotNotFoundException;
 import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
 import ru.skypro.lessons.auction.model.Status;
+import ru.skypro.lessons.auction.repository.BidRepository;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class LotsServiceImpl implements LotsService{
+public class LotsServiceImpl implements LotsService {
     private final LotRepository lotRepository;
+    private final BidRepository bidRepository;
     private final PagingLotRepository pagingLotRepository;
+    private static final Logger logger = LoggerFactory.getLogger(LotsService.class);
 
 
     @Override
     public Bid getFirstBidder(int id) {
-        Lot lot = (Lot) lotRepository.findById(id).orElseThrow(new RuntimeException(id));
-
-                .stream()
-                .map(l -> l.getBids())
-                .findFirst();
+        Lot lot = (Lot) lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        return lot.getBids().stream().findFirst()
+                .orElseThrow(() -> {
+                    logger.error("Ставка не найдена");
+                    return new BidNotFoundException();
+                });
     }
+
 
     @Override
     public Bid getFrequentBidder(int id) {
@@ -44,22 +54,55 @@ public class LotsServiceImpl implements LotsService{
 
     @Override
     public void startLot(int id) {
-
+        Lot lot = (Lot) lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        logger.info("Торги по лоту " + id + " начаты");
+        lot.setStatus(Status.STARTED);
+        lotRepository.save(lot);
     }
 
     @Override
-    public String makeBet(int id) {
-        return null;
+    public void makeBet(int id, String bidderName) {
+        Lot lot = (Lot) lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        if (lot.getStatus() == Status.STARTED) {
+            Bid bid = new Bid(bidderName);
+            List<Bid> bids = new LinkedList<>(lot.getBids());
+            bids.add(bid);
+            lot.setBids(bids);
+            logger.info("Ставка по лоту " + id + " сделана");
+            bidRepository.save(bid);
+            lotRepository.save(lot);
+        } else {
+            logger.error("Статус лота не позволяет сделать ставку");
+        }
     }
 
     @Override
     public void stopLot(int id) {
-
+        Lot lot = (Lot) lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        logger.info("Лот " + id + " остановлен");
+        lot.setStatus(Status.STOPPED);
+        lotRepository.save(lot);
     }
 
     @Override
-    public CreateLot createLot(String title, String description, int startPrice, int bidPrice) {
-        return null;
+    public Lot createLot(String title, String description, int startPrice, int bidPrice) {
+        CreateLot createLot = new CreateLot(title, description, startPrice, bidPrice);
+        Lot lot = createLot.toLot(createLot);
+        lotRepository.save(lot);
+        logger.info("Лот успешно создан");
+        return lot;
     }
 
     @Override

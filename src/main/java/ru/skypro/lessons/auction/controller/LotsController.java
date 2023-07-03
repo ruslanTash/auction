@@ -46,8 +46,9 @@ public class LotsController {
 
     //    Сделать ставку по лоту
     @PostMapping("/{id}/bid")
-    public String makeBet(@PathVariable int id) {
-        return lotsService.makeBet(id);
+    public void makeBet(@PathVariable int id,
+                          @RequestParam("bidderName") String bidderName) {
+        lotsService.makeBet(id, bidderName);
     }
 
 
@@ -60,7 +61,7 @@ public class LotsController {
 
     //    Создает новый лот
     @PostMapping
-    public CreateLot createLot(@RequestParam String title,
+    public Lot createLot(@RequestParam String title,
                                @RequestParam String description,
                                @RequestParam int startPrice,
                                @RequestParam int bidPrice) {
