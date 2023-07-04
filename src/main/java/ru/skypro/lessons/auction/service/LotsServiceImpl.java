@@ -29,16 +29,18 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public Bid getFirstBidder(int id) {
-        Lot lot = (Lot) lotRepository.findById(id)
+        Lot lot = lotRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
                 });
-        return lot.getBids().stream().findFirst()
+        Bid bid = lot.getBids().stream()
+                .findFirst()
                 .orElseThrow(() -> {
                     logger.error("Ставка не найдена");
                     return new BidNotFoundException();
                 });
+        return  bid;
     }
 
 
@@ -49,7 +51,13 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public FullLot getEmployeeFullLotById(int id) {
-        return null;
+        Lot lot = lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+
+        return FullLot.fromLot(lot);
     }
 
     @Override

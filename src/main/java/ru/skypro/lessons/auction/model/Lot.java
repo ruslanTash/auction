@@ -30,15 +30,6 @@ public class Lot {
     @JoinColumn(name = "bid_id")
     List<Bid> bids;
 
-    public Lot(Integer id, Status status, String title, String description, int startPrice, int bidPrice, ArrayDeque<Bid> bids) {
-        this.id = id;
-        this.status = status;
-        this.title = title;
-        this.description = description;
-        this.startPrice = startPrice;
-        this.bidPrice = bidPrice;
-        this.bids = new LinkedList<>(bids);
-    }
 
     public Lot(Integer id, int statusId, String title, String description, int startPrice, int bidPrice) {
         this.id = id;

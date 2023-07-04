@@ -1,4 +1,5 @@
 package ru.skypro.lessons.auction.DTO;
+
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.lessons.auction.model.Bid;
@@ -17,16 +18,21 @@ public class FullLot {
     private int currentPrice;
     private Bid lastBid;
 
-    private void setCurrentPrise(){
-    int countBids = 10;
-    this.currentPrice = this.startPrice + this.bidPrice * countBids;
+    private int getCurrentPriseFromLot(Lot lot) {
+        return lot.getStartPrice() + (lot.getBidPrice() * getCountBid(lot));
     }
 
-    private void setLastBid(){
-        this.lastBid = new Bid();
+    private Bid getLastBidFromLot(Lot lot) {
+        int count = getCountBid(lot);
+        Bid bid = lot.getBids().get(--count);
+        return bid;
     }
 
-    public static FullLot fromLot(Lot lot){
+    private int getCountBid(Lot lot) {
+        return lot.getBids().size();
+    }
+
+    public static FullLot fromLot(Lot lot) {
         FullLot fullLot = new FullLot();
         fullLot.setId(lot.getId());
         fullLot.setStatus(lot.getStatus());
@@ -34,12 +40,12 @@ public class FullLot {
         fullLot.setDescription(lot.getDescription());
         fullLot.setStartPrice(lot.getStartPrice());
         fullLot.setBidPrice(lot.getBidPrice());
-        fullLot.setCurrentPrice(0);
-        fullLot.setLastBid(new Bid());
+        fullLot.setCurrentPrice(fullLot.getCurrentPriseFromLot(lot));
+        fullLot.setLastBid(fullLot.getLastBidFromLot(lot));
         return fullLot;
     }
 
-    public Lot toLot(FullLot fullLot){
+    public Lot toLot(FullLot fullLot) {
         Lot lot = new Lot();
         lot.setId(this.getId());
         lot.setStatus(this.getStatus());
