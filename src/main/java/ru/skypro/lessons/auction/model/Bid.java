@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "bidder_name")
     private String bidderName;
@@ -25,9 +26,5 @@ public class Bid {
         this.bidderName = bidderName;
         this.bidDate = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalDateTime.now().toLocalTime());
     }
-
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "lot_id")
-//    private Lot lot;
 
 }

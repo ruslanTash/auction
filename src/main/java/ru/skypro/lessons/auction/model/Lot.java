@@ -19,6 +19,7 @@ public class Lot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Integer id;
     private Status status;
     private String title;

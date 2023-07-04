@@ -3,6 +3,9 @@ package ru.skypro.lessons.auction.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.skypro.lessons.auction.DTO.CreateLot;
 import ru.skypro.lessons.auction.DTO.FullLot;
@@ -45,11 +48,6 @@ public class LotsServiceImpl implements LotsService {
 
 
     @Override
-    public Bid getFrequentBidder(int id) {
-        return null;
-    }
-
-    @Override
     public FullLot getEmployeeFullLotById(int id) {
         Lot lot = lotRepository.findById(id)
                 .orElseThrow(() -> {
@@ -62,7 +60,7 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public void startLot(int id) {
-        Lot lot = (Lot) lotRepository.findById(id)
+        Lot lot = lotRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
@@ -94,7 +92,7 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public void stopLot(int id) {
-        Lot lot = (Lot) lotRepository.findById(id)
+        Lot lot = lotRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
@@ -115,11 +113,31 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public List<Lot> getLotsByStatusAndPage(Status status, int page) {
-        return null;
+        List<Lot> allLots = (List<Lot>) lotRepository.findAll();
+        List<Lot> lotByStatus = lotRepository.findByStatus(status);
+
+        lotRepository.saveAll(lotByStatus);
+
+        int unitPerPage = 10;
+        Pageable lotOfConcretePage = PageRequest.of(page, unitPerPage);
+        Page<Lot> pageLot = pagingLotRepository.findAll(lotOfConcretePage);
+        List<Lot> SelectedLots = pageLot.toList();
+        logger.info("Вызван метод getLotsByStatusAndPage, Status = " + status + ", page = " + page);
+
+        lotRepository.saveAll(allLots);
+
+        return SelectedLots;
     }
 
     @Override
     public String exportLots() {
         return null;
     }
+
+    @Override
+    public Bid getFrequentBidder(int id) {
+        return null;
+    }
+
+
 }
