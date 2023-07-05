@@ -135,8 +135,13 @@ public class LotsServiceImpl implements LotsService {
     }
 
     @Override
-    public Bid getFrequentBidder(int id) {
-        return null;
+    public List<Bid> getFrequentBidder(int id) {
+        Lot lot = lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        return lot.getBids();
     }
 
 

@@ -10,7 +10,7 @@ import java.util.List;
 public interface LotsService {
     Bid getFirstBidder(int id);
 
-    Bid getFrequentBidder(int id);
+    List<Bid> getFrequentBidder(int id);
 
     FullLot getEmployeeFullLotById(int id);
 

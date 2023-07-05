@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: 2
       author: ruslan
       changes:
         - createTable:
@@ -18,15 +18,13 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: status
-                  type: int
+                  type: TINYINT
               - column:
                   name: start_price
                   type: int
               - column:
                   name: bid_price
                   type: int
-                  constraints:
-                  nullable: false
               - column:
                   name: description
                   type: varchar(255)
