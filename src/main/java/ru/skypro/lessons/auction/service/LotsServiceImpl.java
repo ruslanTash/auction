@@ -141,6 +141,7 @@ public class LotsServiceImpl implements LotsService {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
                 });
+        logger.info("Вызван метод getFrequentBidder");
         return lot.getBids();
     }
 
