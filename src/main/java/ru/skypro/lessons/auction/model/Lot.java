@@ -28,7 +28,7 @@ public class Lot {
     private int bidPrice;
 
     @OneToMany
-    @JoinColumn(name = "bid_id")
+    @JoinColumn(name = "lot_id")
     List<Bid> bids;
 
 

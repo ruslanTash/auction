@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +22,8 @@ public class Bid {
     private String bidderName;
     @Column(name = "bid_data")
     private LocalDateTime bidDate;
+
+
 
     public Bid(String bidderName) {
         this.bidderName = bidderName;
