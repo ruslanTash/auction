@@ -18,7 +18,6 @@ import ru.skypro.lessons.auction.repository.BidRepository;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
