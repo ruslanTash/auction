@@ -18,6 +18,7 @@ import ru.skypro.lessons.auction.repository.BidRepository;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -141,6 +142,11 @@ public class LotsServiceImpl implements LotsService {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
                 });
+        List<String> bidderList = lot.getBids().stream()
+                .map(b -> b.getBidderName())
+                        .toList();
+
+
         logger.info("Вызван метод getFrequentBidder");
         return lot.getBids();
     }
