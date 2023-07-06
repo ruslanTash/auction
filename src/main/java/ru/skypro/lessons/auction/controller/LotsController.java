@@ -26,7 +26,7 @@ public class LotsController {
 
     //    Возвращает имя ставившего на данный лот наибольшее количество раз
     @GetMapping("/{id}/frequent")
-    public List<Bid> getFrequentBidder(@PathVariable int id) {
+    public String getFrequentBidder(@PathVariable int id) {
         return lotsService.getFrequentBidder(id);
     }
 

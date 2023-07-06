@@ -18,6 +18,7 @@ import ru.skypro.lessons.auction.repository.BidRepository;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class LotsServiceImpl implements LotsService {
                     logger.error("Ставка не найдена");
                     return new BidNotFoundException();
                 });
-        return  bid;
+        return bid;
     }
 
 
@@ -113,41 +114,56 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public List<Lot> getLotsByStatusAndPage(Status status, int page) {
-        List<Lot> allLots = (List<Lot>) lotRepository.findAll();
-        List<Lot> lotByStatus = lotRepository.findByStatus(status);
-
-        lotRepository.saveAll(lotByStatus);
-
         int unitPerPage = 10;
         Pageable lotOfConcretePage = PageRequest.of(page, unitPerPage);
         Page<Lot> pageLot = pagingLotRepository.findAll(lotOfConcretePage);
-        List<Lot> SelectedLots = pageLot.toList();
         logger.info("Вызван метод getLotsByStatusAndPage, Status = " + status + ", page = " + page);
-
-        lotRepository.saveAll(allLots);
-
-        return SelectedLots;
+        return pageLot.stream().filter(l -> l.getStatus() == status).toList();
     }
 
     @Override
-    public String exportLots() {
-        return null;
-    }
-
-    @Override
-    public List<Bid> getFrequentBidder(int id) {
+    public String getFrequentBidder(int id) {
         Lot lot = lotRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Лот с ID = " + id + " не найден");
                     return new LotNotFoundException(id);
                 });
-        List<String> bidderList = lot.getBids().stream()
+        String[] bidders = lot.getBids().stream()
                 .map(b -> b.getBidderName())
-                        .toList();
-
-
+                .toList().toArray(new String[0]);
         logger.info("Вызван метод getFrequentBidder");
-        return lot.getBids();
+        return mostPopular(bidders);
+    }
+
+    public static String mostPopular(String[] array) {
+        if (array == null || array.length == 0) {
+            return null;
+        }
+        Arrays.sort(array);
+
+        String prev = array[0];
+        String popular = array[0];
+        int count = 1;
+        int maxCount = 1;
+
+        for (int i = 1; i < array.length; i++) {
+            if (array[i].equals(prev)) {
+                count++;
+            } else {
+                if (count > maxCount) {
+                    popular = array[i - 1];
+                    maxCount = count;
+                }
+                prev = array[i];
+                count = 1;
+            }
+        }
+        return count > maxCount ? array[array.length - 1] : popular;
+    }
+
+    @Override
+    public String exportLots() {
+        return null;
     }
 
 

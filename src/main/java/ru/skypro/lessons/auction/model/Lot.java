@@ -1,6 +1,8 @@
 package ru.skypro.lessons.auction.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.ArrayDeque;
@@ -22,9 +24,15 @@ public class Lot {
     @Column(name = "id", nullable = false)
     private Integer id;
     private Status status;
+    @Min(3)
+    @Max(64)
     private String title;
+    @Min(1)
+    @Max(4096)
     private String description;
+    @Min(1)
     private int startPrice;
+    @Min(1)
     private int bidPrice;
 
     @OneToMany
