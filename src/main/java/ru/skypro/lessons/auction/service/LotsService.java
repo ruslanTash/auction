@@ -5,6 +5,7 @@ import ru.skypro.lessons.auction.model.Bid;
 import ru.skypro.lessons.auction.model.Lot;
 import ru.skypro.lessons.auction.model.Status;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface LotsService {
@@ -24,5 +25,5 @@ public interface LotsService {
 
     List<Lot> getLotsByStatusAndPage(Status status, int page);
 
-    String exportLots();
+    String exportLots() throws IOException;
 }

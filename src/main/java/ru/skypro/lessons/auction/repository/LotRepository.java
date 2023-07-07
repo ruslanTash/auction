@@ -10,4 +10,5 @@ import java.util.List;
 public interface LotRepository extends CrudRepository<Lot, Integer> {
     List<Lot> findByStatus(Status status);
 
+
 }

@@ -9,6 +9,7 @@ import ru.skypro.lessons.auction.model.Lot;
 import ru.skypro.lessons.auction.model.Status;
 import ru.skypro.lessons.auction.service.LotsService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -78,7 +79,7 @@ public class LotsController {
 
     //    Экспортировать все лоты в файл CSV
     @GetMapping("/export")
-    public String exportLots() {
+    public String exportLots() throws IOException {
         return lotsService.exportLots();
     }
 

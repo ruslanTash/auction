@@ -1,5 +1,6 @@
 package ru.skypro.lessons.auction.DTO;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.lessons.auction.model.Bid;
@@ -8,6 +9,7 @@ import ru.skypro.lessons.auction.model.Status;
 
 @Setter
 @Getter
+@EqualsAndHashCode
 public class FullLot {
     private Integer id;
     private Status status;

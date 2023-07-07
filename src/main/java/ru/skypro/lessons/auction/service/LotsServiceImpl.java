@@ -1,6 +1,10 @@
 package ru.skypro.lessons.auction.service;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,18 +22,21 @@ import ru.skypro.lessons.auction.repository.BidRepository;
 import ru.skypro.lessons.auction.repository.LotRepository;
 import ru.skypro.lessons.auction.repository.PagingLotRepository;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Builder
 @Service
 public class LotsServiceImpl implements LotsService {
     private final LotRepository lotRepository;
     private final BidRepository bidRepository;
     private final PagingLotRepository pagingLotRepository;
     private static final Logger logger = LoggerFactory.getLogger(LotsService.class);
-
+    private static final String CSV_FILE = "D:\\test.csv";
 
     @Override
     public Bid getFirstBidder(int id) {
@@ -162,9 +169,28 @@ public class LotsServiceImpl implements LotsService {
     }
 
     @Override
-    public String exportLots() {
-        return null;
+    public String exportLots() throws IOException {
+
+
+
+
+        String fileName = "src/test/resources/lots.csv";
+        String[] HEADERS = {"ID", "Status", "Title", "Discription", "Start Price", "Bid Price"};
+
+            FileWriter out = new FileWriter(fileName);
+            try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
+                    .withHeader(HEADERS))) {
+
+                lotRepository.findAll().forEach(l -> {
+                    try {
+                        printer.printRecord(l);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+
+        return fileName;
     }
-
-
 }
+
