@@ -18,7 +18,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: status
-                  type: TINYINT
+                  type: varchar(8)
               - column:
                   name: start_price
                   type: int

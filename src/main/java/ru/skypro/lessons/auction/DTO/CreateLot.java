@@ -17,7 +17,7 @@ public class CreateLot {
     private int startPrice;
     private int bidPrice;
 
-    public static CreateLot fromLot(Lot lot){
+    public static CreateLot fromLot(Lot lot) {
         CreateLot createLot = new CreateLot();
         createLot.setTitle(lot.getTitle());
         createLot.setDescription(lot.getDescription());
@@ -26,7 +26,7 @@ public class CreateLot {
         return createLot;
     }
 
-    public Lot toLot(CreateLot createLot){
+    public Lot toLot(CreateLot createLot) {
         Lot lot = new Lot();
         lot.setStatus(Status.CREATED);
         lot.setTitle(this.getTitle());

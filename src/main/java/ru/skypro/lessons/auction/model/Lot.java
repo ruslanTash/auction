@@ -23,6 +23,7 @@ public class Lot {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Integer id;
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Min(3)
     @Max(64)

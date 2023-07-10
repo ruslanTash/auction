@@ -36,43 +36,28 @@ public class LotsServiceImpl implements LotsService {
     private final BidRepository bidRepository;
     private final PagingLotRepository pagingLotRepository;
     private static final Logger logger = LoggerFactory.getLogger(LotsService.class);
-    private static final String CSV_FILE = "D:\\test.csv";
+
 
     @Override
     public Bid getFirstBidder(int id) {
-        Lot lot = lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
-        Bid bid = lot.getBids().stream()
+        return getLotById(id).getBids().stream()
                 .findFirst()
                 .orElseThrow(() -> {
                     logger.error("Ставка не найдена");
                     return new BidNotFoundException();
                 });
-        return bid;
     }
 
 
     @Override
     public FullLot getEmployeeFullLotById(int id) {
-        Lot lot = lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
-
+        Lot lot = getLotById(id);
         return FullLot.fromLot(lot);
     }
 
     @Override
     public void startLot(int id) {
-        Lot lot = lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
+        Lot lot = getLotById(id);
         logger.info("Торги по лоту " + id + " начаты");
         lot.setStatus(Status.STARTED);
         lotRepository.save(lot);
@@ -80,11 +65,7 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public void makeBet(int id, String bidderName) {
-        Lot lot = (Lot) lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
+        Lot lot = getLotById(id);
         if (lot.getStatus() == Status.STARTED) {
             Bid bid = new Bid(bidderName);
             List<Bid> bids = new LinkedList<>(lot.getBids());
@@ -100,11 +81,7 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public void stopLot(int id) {
-        Lot lot = lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
+        Lot lot = getLotById(id);
         logger.info("Лот " + id + " остановлен");
         lot.setStatus(Status.STOPPED);
         lotRepository.save(lot);
@@ -130,11 +107,7 @@ public class LotsServiceImpl implements LotsService {
 
     @Override
     public String getFrequentBidder(int id) {
-        Lot lot = lotRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Лот с ID = " + id + " не найден");
-                    return new LotNotFoundException(id);
-                });
+        Lot lot = getLotById(id);
         String[] bidders = lot.getBids().stream()
                 .map(b -> b.getBidderName())
                 .toList().toArray(new String[0]);
@@ -142,7 +115,36 @@ public class LotsServiceImpl implements LotsService {
         return mostPopular(bidders);
     }
 
-    public static String mostPopular(String[] array) {
+
+    @Override
+    public String exportLots() throws IOException {
+        String fileName = "src/test/resources/lots.csv";
+        String[] HEADERS = {"ID", "Status", "Title", "Description", "Start Price", "Bid Price"};
+        FileWriter out = new FileWriter(fileName);
+        try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
+                .withHeader(HEADERS))) {
+            lotRepository.findAll().forEach(l -> {
+                try {
+                    printer.printRecord(l);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        return fileName;
+    }
+
+    private Lot getLotById(int id) {
+        Lot lot = lotRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Лот с ID = " + id + " не найден");
+                    return new LotNotFoundException(id);
+                });
+        return lot;
+    }
+
+    private String mostPopular(String[] array) {
         if (array == null || array.length == 0) {
             return null;
         }
@@ -166,31 +168,6 @@ public class LotsServiceImpl implements LotsService {
             }
         }
         return count > maxCount ? array[array.length - 1] : popular;
-    }
-
-    @Override
-    public String exportLots() throws IOException {
-
-
-
-
-        String fileName = "src/test/resources/lots.csv";
-        String[] HEADERS = {"ID", "Status", "Title", "Discription", "Start Price", "Bid Price"};
-
-            FileWriter out = new FileWriter(fileName);
-            try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
-                    .withHeader(HEADERS))) {
-
-                lotRepository.findAll().forEach(l -> {
-                    try {
-                        printer.printRecord(l);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
-
-        return fileName;
     }
 }
 
