@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: ruslan
+      changes:
+        - createTable:
+            tableName: lot
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: TINYINT
+              - column:
+                  name: start_price
+                  type: int
+              - column:
+                  name: bid_price
+                  type: int
+              - column:
+                  name: description
+                  type: varchar(255)
+
